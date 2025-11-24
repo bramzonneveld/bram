@@ -9,6 +9,7 @@
         body {
             margin: 0;
             height: 100vh;
+            width: 100vw;
             background: black;
             display: flex;
             justify-content: center;
@@ -17,27 +18,49 @@
         }
 
         img {
-            width: 35%;
+            width: 100vw;      /* FULLSCREEN BREEDTE */
+            height: 100vh;     /* FULLSCREEN HOOGTE */
+            object-fit: contain; /* Behoud vorm logo */
             opacity: 1;
-            transition: opacity 1s ease-out;
         }
 
-        .fade-out {
-            opacity: 0;
+        @keyframes dissolve {
+            0% {
+                filter: blur(0px);
+                opacity: 1;
+            }
+            50% {
+                filter: blur(5px);
+                opacity: 0.7;
+            }
+            100% {
+                filter: blur(25px);
+                opacity: 0;
+                transform: scale(1.2);
+            }
+        }
+
+        .dissolve {
+            animation: dissolve 1.3s forwards;
         }
     </style>
 
-    <script>
-        setTimeout(() => {
-            document.querySelector("img").classList.add("fade-out");
-        }, 2500); // fade na 2.5 sec
-
-        setTimeout(() => {
-            window.location.href = "/home"; 
-        }, 3500); // redirect na 3.5 sec
-    </script>
 </head>
 <body>
-    <img src="/djbramlogo.png" alt="DJ Bram Logo">
+
+    <img id="logo" src="/djbramlogo.png" alt="DJ Bram Logo">
+
+    <script>
+        // Eerst het logo laten dissolven
+        setTimeout(() => {
+            document.getElementById("logo").classList.add("dissolve");
+        }, 2000);
+
+        // Dan naar homepagina
+        setTimeout(() => {
+            window.location.href = "/home";
+        }, 3500);
+    </script>
+
 </body>
 </html>
