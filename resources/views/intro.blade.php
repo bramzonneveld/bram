@@ -8,58 +8,87 @@
     <style>
         body {
             margin: 0;
-            height: 100vh;
-            width: 100vw;
             background: black;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
         }
 
-        img {
-            width: 100vw;      /* FULLSCREEN BREEDTE */
-            height: 100vh;     /* FULLSCREEN HOOGTE */
-            object-fit: contain; /* Behoud vorm logo */
+        #logo {
+            position: absolute;
+            width: 90vw;
+            max-width: 900px;
+            filter: brightness(1.2);
             opacity: 1;
+            transition: opacity .5s;
         }
 
-        @keyframes dissolve {
-            0% {
-                filter: blur(0px);
-                opacity: 1;
-            }
-            50% {
-                filter: blur(5px);
-                opacity: 0.7;
-            }
-            100% {
-                filter: blur(25px);
-                opacity: 0;
-                transform: scale(1.2);
-            }
+        /* --- GLITCH EFFECT --- */
+        @keyframes glitch {
+            0% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(10% 0 85% 0); transform: translate(-10px); }
+            40% { clip-path: inset(80% 0 5% 0); transform: translate(10px); }
+            60% { clip-path: inset(40% 0 40% 0); transform: translate(-5px); }
+            80% { clip-path: inset(5% 0 80% 0); transform: translate(5px); }
+            100% { clip-path: inset(0 0 0 0); transform: translate(0); }
         }
 
-        .dissolve {
-            animation: dissolve 1.3s forwards;
+        .glitch {
+            animation: glitch 0.3s steps(2, end) 10;
+        }
+
+        /* --- ROOK / DISSOLVE --- */
+        @keyframes smoke {
+            0% { filter: blur(0px) opacity(1); transform: scale(1); }
+            50% { filter: blur(10px) opacity(.6); transform: scale(1.1); }
+            100% { filter: blur(30px) opacity(0); transform: scale(1.4); }
+        }
+
+        .smoke {
+            animation: smoke 1.6s forwards;
+        }
+
+        /* --- PIXEL EXPLOSION --- */
+        @keyframes pixelboom {
+            0% { clip-path: circle(0% at center); opacity: 1; }
+            100% { clip-path: circle(150% at center); opacity: 0; }
+        }
+
+        .boom {
+            animation: pixelboom 0.8s forwards;
         }
     </style>
-
 </head>
 <body>
 
     <img id="logo" src="/djbramlogo.png" alt="DJ Bram Logo">
 
     <script>
-        // Eerst het logo laten dissolven
-        setTimeout(() => {
-            document.getElementById("logo").classList.add("dissolve");
-        }, 2000);
+        const logo = document.getElementById("logo");
 
-        // Dan naar homepagina
+        // 🔥 1) Glitch effect
+        setTimeout(() => {
+            logo.classList.add("glitch");
+        }, 300);
+
+        // 🔥 2) Rook/dissolve
+        setTimeout(() => {
+            logo.classList.remove("glitch");
+            logo.classList.add("smoke");
+        }, 1500);
+
+        // 🔥 3) Pixel-explosion
+        setTimeout(() => {
+            logo.classList.remove("smoke");
+            logo.classList.add("boom");
+        }, 2800);
+
+        // 🔥 4) Ga naar de homepage
         setTimeout(() => {
             window.location.href = "/home";
-        }, 3500);
+        }, 3800);
     </script>
 
 </body>
